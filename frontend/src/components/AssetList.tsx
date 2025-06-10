@@ -19,16 +19,15 @@ import { log } from "console";
 import { ASSET_ENDPOINT } from "../config";
 
 interface Asset {
-  AssetID: string;
-  AssetType: string;
-  SerialNumber: string;
-  Model: string;
-  DateOfPurchase: string;
-  VendorName: string;
-  Condition: string;
-  AssignedTeam?: string;
-  AssignedUser?: string;
-  RegistrationDate: string;
+  id: number;
+  assetName: string;
+  assetType: string;
+  serialNumber: string;
+  purchaseDate: string;
+  warrantyExpiryDate: string;
+  cost: number;
+  status: string;
+  location: string;
 }
 
 interface AssetListProps {
@@ -62,20 +61,21 @@ const AssetList = ({ searchQuery }: AssetListProps) => {
 
       console.log(response)
       
-      return response.data.data.assets || [];
+      return response.data || [];
     },
     enabled: !!user
   });
 
   const filteredAssets = assets?.filter((asset: Asset) => {
-    const matchesSearch = asset.AssetID.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      asset.Model?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === "all" || asset.Condition === statusFilter;
-    const matchesType = typeFilter === "all" || asset.AssetType === typeFilter;
+    const matchesSearch = asset.assetName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      asset.serialNumber.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === "all" || asset.status === statusFilter;
+    const matchesType = typeFilter === "all" || asset.assetType === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
   }).sort((a: Asset, b: Asset) => {
-    return new Date(b.RegistrationDate).getTime() - new Date(a.RegistrationDate).getTime();
+    return new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime();
   });
+  console.log("🚀 ~ filteredAssets ~ filteredAssets:", assets)
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -125,26 +125,30 @@ const AssetList = ({ searchQuery }: AssetListProps) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Asset ID</TableHead>
+                <TableHead>ID</TableHead>
+                <TableHead>Name</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Model</TableHead>
                 <TableHead>Serial Number</TableHead>
-                <TableHead>Condition</TableHead>
-                <TableHead>Assigned To</TableHead>
-                <TableHead>Team</TableHead>
+                <TableHead>Purchase Date</TableHead>
+                <TableHead>Warranty Expiry</TableHead>
+                <TableHead>Cost</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Location</TableHead>
                 {isAdmin && <TableHead>Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredAssets?.map((asset: Asset) => (
-                <TableRow key={asset.AssetID}>
-                  <TableCell>{asset.AssetID}</TableCell>
-                  <TableCell>{asset.AssetType}</TableCell>
-                  <TableCell>{asset.Model}</TableCell>
-                  <TableCell>{asset.SerialNumber}</TableCell>
-                  <TableCell>{asset.Condition}</TableCell>
-                  <TableCell>{asset.AssignedUser || "-"}</TableCell>
-                  <TableCell>{asset.AssignedTeam || "-"}</TableCell>
+                <TableRow key={asset.id}>
+                  <TableCell>{asset.id}</TableCell>
+                  <TableCell>{asset.assetName}</TableCell>
+                  <TableCell>{asset.assetType}</TableCell>
+                  <TableCell>{asset.serialNumber}</TableCell>
+                  <TableCell>{asset.purchaseDate}</TableCell>
+                  <TableCell>{asset.warrantyExpiryDate}</TableCell>
+                  <TableCell>{asset.cost}</TableCell>
+                  <TableCell>{asset.status}</TableCell>
+                  <TableCell>{asset.location}</TableCell>
                   {isAdmin && (
                     <TableCell>
                       <div className="flex space-x-2">
@@ -155,7 +159,7 @@ const AssetList = ({ searchQuery }: AssetListProps) => {
                             </Button>
                           </DialogTrigger>
                           <DialogContent className="bg-white">
-                            <AssetAssignment assetId={asset.AssetID} />
+                            <AssetAssignment assetId={asset.id.toString()} />
                           </DialogContent>
                         </Dialog>
                         <Button variant="outline" size="icon" className="h-8 w-8">

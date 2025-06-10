@@ -1,0 +1,105 @@
+# Multi-stage build template for various service types
+# Uncomment and modify the appropriate sections based on your service type
+
+# ===== Python Service Template =====
+# FROM python:3.10-slim
+# 
+# WORKDIR /app
+# 
+# # Install system dependencies if needed
+# # RUN apt-get update && apt-get install -y \
+# #     package1 \
+# #     package2 \
+# #     && apt-get clean && rm -rf /var/lib/apt/lists/*
+# 
+# # Copy requirements first for better caching
+# # COPY requirements.txt .
+# # RUN pip install --no-cache-dir -r requirements.txt
+# 
+# # Copy application code
+# # COPY . .
+# 
+# # EXPOSE 8000
+# 
+# # CMD ["python", "main.py"]
+# # For Flask: CMD ["flask", "run", "--host=0.0.0.0"]
+# # For FastAPI: CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+# ===== Node.js Service Template =====
+# FROM node:20-alpine as build
+# 
+# WORKDIR /app
+# 
+# # Copy package files
+# # COPY package*.json ./
+# 
+# # Install dependencies
+# # RUN npm ci
+# 
+# # Copy application code
+# # COPY . .
+# 
+# # Build if needed
+# # RUN npm run build
+# 
+# # For production with Nginx
+# # FROM nginx:alpine
+# # COPY --from=build /app/dist /usr/share/nginx/html
+# # EXPOSE 80
+# # CMD ["nginx", "-g", "daemon off;"]
+# 
+# # For Node.js runtime
+# # EXPOSE 3000
+# # CMD ["npm", "start"]
+
+# ===== Go Service Template =====
+# FROM golang:1.21-alpine AS build
+# 
+# WORKDIR /app
+# 
+# # Copy go mod files
+# # COPY go.mod go.sum ./
+# # RUN go mod download
+# 
+# # Copy source code
+# # COPY . .
+# 
+# # Build the application
+# # RUN go build -o main .
+# 
+# # Use a smaller image for the final stage
+# # FROM alpine:latest
+# 
+# # Copy the binary from the build stage
+# # COPY --from=build /app/main /app/main
+# 
+# # EXPOSE 8080
+# 
+# # CMD ["/app/main"]
+
+# ===== Java Service Template =====
+# FROM maven:3.8-openjdk-17 AS build
+# 
+# WORKDIR /app
+# 
+# # Copy pom.xml
+# # COPY pom.xml .
+# # RUN mvn dependency:go-offline
+# 
+# # Copy source code
+# # COPY src ./src
+# 
+# # Build the application
+# # RUN mvn package -DskipTests
+# 
+# # Use a smaller image for the final stage
+# # FROM openjdk:17-jdk-slim
+# 
+# # Copy the JAR file from the build stage
+# # COPY --from=build /app/target/*.jar app.jar
+# 
+# # EXPOSE 8080
+# 
+# # CMD ["java", "-jar", "app.jar"]
+
+# Choose the appropriate template based on your service type and uncomment the relevant sections

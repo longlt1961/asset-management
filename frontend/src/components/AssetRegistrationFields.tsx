@@ -12,7 +12,21 @@ export const AssetFormFields = ({ form }: AssetFormFieldsProps) => {
     <>
       <FormField
         control={form.control}
-        name="AssetType"
+        name="assetName"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="required-field">Asset Name</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage className="text-red-500" />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="assetType"
         render={({ field }) => (
           <FormItem>
             <FormLabel className="required-field">Asset Type</FormLabel>
@@ -36,7 +50,7 @@ export const AssetFormFields = ({ form }: AssetFormFieldsProps) => {
 
       <FormField
         control={form.control}
-        name="SerialNumber"
+        name="serialNumber"
         render={({ field }) => (
           <FormItem>
             <FormLabel className="required-field">Serial Number</FormLabel>
@@ -50,24 +64,10 @@ export const AssetFormFields = ({ form }: AssetFormFieldsProps) => {
 
       <FormField
         control={form.control}
-        name="Model"
+        name="purchaseDate"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="required-field">Model</FormLabel>
-            <FormControl>
-              <Input {...field} />
-            </FormControl>
-            <FormMessage className="text-red-500" />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="DateOfPurchase"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="required-field">Date of Purchase</FormLabel>
+            <FormLabel className="required-field">Purchase Date</FormLabel>
             <FormControl>
               <Input type="date" {...field} />
             </FormControl>
@@ -78,12 +78,12 @@ export const AssetFormFields = ({ form }: AssetFormFieldsProps) => {
 
       <FormField
         control={form.control}
-        name="VendorName"
+        name="warrantyExpiryDate"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="required-field">Vendor Name</FormLabel>
+            <FormLabel className="required-field">Warranty Expiry Date</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input type="date" {...field} />
             </FormControl>
             <FormMessage className="text-red-500" />
           </FormItem>
@@ -92,10 +92,10 @@ export const AssetFormFields = ({ form }: AssetFormFieldsProps) => {
 
       <FormField
         control={form.control}
-        name="Cost"
+        name="cost"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Cost</FormLabel>
+            <FormLabel className="required-field">Cost</FormLabel>
             <FormControl>
               <Input type="number" {...field} />
             </FormControl>
@@ -106,28 +106,14 @@ export const AssetFormFields = ({ form }: AssetFormFieldsProps) => {
 
       <FormField
         control={form.control}
-        name="WarrantyExpiryDate"
+        name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Warranty Expiry Date</FormLabel>
-            <FormControl>
-              <Input type="date" {...field} />
-            </FormControl>
-            <FormMessage className="text-red-500" />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="Condition"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="required-field">Condition</FormLabel>
+            <FormLabel className="required-field">Status</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger className="bg-white">
-                  <SelectValue placeholder="Select condition" />
+                  <SelectValue placeholder="Select status" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -136,6 +122,20 @@ export const AssetFormFields = ({ form }: AssetFormFieldsProps) => {
                 <SelectItem value="Needs Repair">Needs Repair</SelectItem>
               </SelectContent>
             </Select>
+            <FormMessage className="text-red-500" />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="location"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="required-field">Location</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
             <FormMessage className="text-red-500" />
           </FormItem>
         )}

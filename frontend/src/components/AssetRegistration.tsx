@@ -1,10 +1,14 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import { showToast } from "@/components/ui/custom-toast";
 import { DialogClose } from "@/components/ui/dialog";
 import axios from "axios";
@@ -12,42 +16,47 @@ import { useQueryClient } from "@tanstack/react-query";
 import { AssetFormFields } from "./AssetRegistrationFields";
 import { ASSET_ENDPOINT } from "../config";
 
+
+
+// Schema to match Asset interface (except id)
 const assetSchema = z.object({
-  AssetType: z.string().min(1, "Asset type is required"),
-  SerialNumber: z.string().min(1, "Serial number is required"),
-  Model: z.string().min(1, "Model is required").max(50, "Model must be less than 50 characters"),
-  DateOfPurchase: z.string().min(1, "Date of purchase is required"),
-  VendorName: z.string().min(1, "Vendor name is required"),
-  Cost: z.string().optional(),
-  WarrantyExpiryDate: z.string().optional(),
-  Condition: z.string().min(1, "Condition is required"),
+  assetName: z.string().min(1, "Asset name is required"),
+  assetType: z.string().min(1, "Asset type is required"),
+  serialNumber: z.string().min(1, "Serial number is required"),
+  purchaseDate: z.string().min(1, "Purchase date is required"),
+  warrantyExpiryDate: z.string().min(1, "Warranty expiry date is required"),
+  cost: z.coerce.number().min(0, "Cost is required"),
+  status: z.string().min(1, "Status is required"),
+  location: z.string().min(1, "Location is required"),
 });
+
+type AssetFormType = z.infer<typeof assetSchema>;
 
 const AssetRegistration = () => {
   const queryClient = useQueryClient();
-  // Get user data from localStorage
   const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
-  const form = useForm<z.infer<typeof assetSchema>>({
+
+  const form = useForm<AssetFormType>({
     resolver: zodResolver(assetSchema),
     defaultValues: {
-      AssetType: "",
-      SerialNumber: "",
-      Model: "",
-      DateOfPurchase: "",
-      VendorName: "",
-      Cost: "",
-      WarrantyExpiryDate: "",
-      Condition: "",
+      assetName: "",
+      assetType: "",
+      serialNumber: "",
+      purchaseDate: "",
+      warrantyExpiryDate: "",
+      cost: 0,
+      status: "",
+      location: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof assetSchema>) => {
+  const onSubmit = async (values: AssetFormType) => {
     try {
       await axios.post(`${ASSET_ENDPOINT}`, values, {
         headers: {
-          Username: user.username,
-        }
+          Username: user?.username,
+        },
       });
       showToast("Asset registered successfully", "success");
       queryClient.invalidateQueries({ queryKey: ["assets"] });

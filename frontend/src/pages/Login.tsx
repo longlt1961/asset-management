@@ -4,6 +4,18 @@ import { toast } from "sonner";
 import axios from "axios";
 import { LOGIN_ENDPOINT } from "../config";
 
+interface Asset {
+  id: number;
+  assetName: string;
+  assetType: string;
+  serialNumber: string;
+  purchaseDate: string;
+  warrantyExpiryDate: string;
+  cost: number;
+  status: string;
+  location: string;
+}
+
 const Login = () => {
   const [usernameInput, setUsername] = useState("");
   const [password, setPassword] = useState("");

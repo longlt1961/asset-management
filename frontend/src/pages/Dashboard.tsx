@@ -20,7 +20,7 @@ const Dashboard = () => {
   // Get user data from localStorage
   const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
-  const isAdmin = user?.role === "Admin";
+  const isAdmin = user?.role === "admin";
 
   const handleLogout = () => {
     localStorage.removeItem("user");
