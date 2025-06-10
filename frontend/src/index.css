@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans min-h-screen;
+  }
+}
+
+.required-field::after {
+  content: "*";
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.card-hover {
+  @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+}
+
+.input-field {
+  @apply w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white;
+}
+
+.btn-primary {
+  @apply px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors duration-200 shadow-sm hover:shadow-md;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 bg-secondary text-white rounded-lg hover:bg-opacity-90 transition-colors duration-200 shadow-sm hover:shadow-md;
+}
+
+.select-content {
+  @apply bg-white border shadow-lg rounded-md animate-scale-in;
+}
+
+[data-radix-popper-content-wrapper] {
+  @apply z-50;
+}
+
+.DialogOverlay {
+  @apply bg-black/50 backdrop-blur-[2px] fixed inset-0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent {
+  @apply bg-white rounded-lg shadow-lg fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[90vw] max-w-[500px] max-h-[85vh] p-6;
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Update SelectContent background */
+.SelectContent {
+  @apply bg-white border rounded-md shadow-md overflow-hidden;
+  animation: selectShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.SelectViewport {
+  @apply p-1 bg-white;
+}
+
+/* Add specific styles for select within dialogs */
+.DialogContent .SelectContent,
+.DialogContent .SelectViewport,
+.DialogContent [data-radix-select-viewport],
+.DialogContent .SelectItem[data-highlighted],
+.DialogContent [data-radix-select-item] {
+  @apply bg-white;
+}
+
+/* Ensure select items have white background */
+.SelectItem,
+[data-radix-select-item] {
+  @apply bg-white hover:bg-gray-100;
+}
+
+/* Force white background on select dropdown */
+[data-radix-popper-content-wrapper] [role="listbox"] {
+  @apply bg-white;
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes selectShow {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
